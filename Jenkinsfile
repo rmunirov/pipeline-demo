@@ -1,18 +1,20 @@
 pipeline {
+
     agent any
 
     stages {
 
-        stage('Hello') {
+        stage('Checkout Info') {
             steps {
-                sh 'echo From Jenkinsfile'
+
+                sh 'pwd'
+                sh 'ls -la'
             }
         }
 
-        stage('System Info') {
+        stage('Build') {
             steps {
-                sh 'hostname'
-                sh 'pwd'
+                echo 'Build started'
             }
         }
     }
