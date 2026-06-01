@@ -1,0 +1,8 @@
+{
+  "name": "demo-app",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo tests passed",
+    "build": "mkdir -p dist && echo build > dist/build.txt"
+  }
+}

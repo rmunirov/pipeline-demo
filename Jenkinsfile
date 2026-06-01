@@ -2,20 +2,70 @@ pipeline {
 
     agent any
 
+    environment {
+        IMAGE_NAME = "demo-app"
+    }
+
     stages {
 
-        stage('Checkout Info') {
+        stage('Checkout') {
             steps {
+                checkout scm
+            }
+        }
 
-                sh 'pwd'
-                sh 'ls -la'
+        stage('Install') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'npm test'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Build started'
+                sh 'npm run build'
             }
+        }
+
+        stage('Package') {
+            steps {
+                archiveArtifacts artifacts: 'dist/**'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh '''
+                docker build \
+                    -t ${IMAGE_NAME}:${BUILD_NUMBER} .
+                '''
+            }
+        }
+
+        stage('Cleanup') {
+            steps {
+                sh 'docker image prune -f'
+            }
+        }
+    }
+
+    post {
+
+        success {
+            echo 'SUCCESS'
+        }
+
+        failure {
+            echo 'FAILED'
+        }
+
+        always {
+            echo 'FINISHED'
         }
     }
 }
