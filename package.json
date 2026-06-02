@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "test": "echo tests passed",
-    "build": "mkdir -p dist && echo build > dist/build.txt"
+    "build": "mkdir -p dist && echo build > dist/build.txt",
+	"test": "jest --ci --reporters=default --reporters=jest-junit"
+  },
+  "devDependencies": {
+    "jest": "^30.0.0",
+    "jest-junit": "^16.0.0"
   }
 }

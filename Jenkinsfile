@@ -7,14 +7,6 @@ pipeline {
     }
 
     stages {
-	    stage('Docker Test') {
-            steps {
-                sh '''
-                    whoami
-                    docker ps
-                '''
-            }
-        }
 
         stage('Checkout') {
             steps {
@@ -79,6 +71,7 @@ pipeline {
         }
 
         always {
+			junit 'junit.xml'
             echo 'FINISHED'
         }
     }
