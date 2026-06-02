@@ -7,6 +7,14 @@ pipeline {
     }
 
     stages {
+	    stage('Docker Test') {
+            steps {
+                sh '''
+                    whoami
+                    docker ps
+                '''
+            }
+        }
 
         stage('Checkout') {
             steps {
