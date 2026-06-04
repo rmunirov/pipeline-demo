@@ -19,6 +19,12 @@ pipeline {
                 sh 'npm install'
             }
         }
+		
+		stage('Lint') {
+			steps {
+				sh 'npx eslint .'
+			}
+		}
 
         stage('Test') {
             steps {
