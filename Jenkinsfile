@@ -25,6 +25,21 @@ pipeline {
                 sh 'npm test'
             }
         }
+		
+		stage('Quality Gate') {
+			steps {
+
+				script {
+					def coverage = readFile('coverage.txt').trim() as Integer
+
+					if (coverage < 80) {
+						error("Coverage too low: ${coverage}%")
+					}
+
+					echo "Coverage OK"
+				}
+			}
+		}
 
         stage('Build') {
             steps {
