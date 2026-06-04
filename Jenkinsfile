@@ -73,6 +73,19 @@ pipeline {
                 sh 'docker image prune -f'
             }
         }
+		
+		stage('Deploy') {
+
+			when {
+				expression {
+					currentBuild.result == null
+				}
+			}
+
+			steps {
+				echo "Deploying..."
+			}
+		}
     }
 
     post {
