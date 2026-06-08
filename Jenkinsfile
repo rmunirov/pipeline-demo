@@ -52,6 +52,21 @@ pipeline {
                 sh 'npm run build'
             }
         }
+		
+		stage('Build-stash') {
+			steps {
+
+				sh '''
+				mkdir -p dist
+				echo "artifact" > dist/build.txt
+				'''
+
+				stash(
+					name: 'build-files',
+					includes: 'dist/**'
+				)
+			}
+		}
 
         stage('Package') {
             steps {
