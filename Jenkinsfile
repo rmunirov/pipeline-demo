@@ -67,6 +67,15 @@ pipeline {
 				)
 			}
 		}
+		
+		stage('Test-unstash') {
+			steps {
+
+				unstash 'build-files'
+
+				sh 'cat dist/build.txt'
+			}
+		}
 
         stage('Package') {
             steps {
