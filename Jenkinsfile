@@ -54,26 +54,31 @@ pipeline {
         }
 		
 		stage('Build-stash') {
+
+			agent any
+
 			steps {
 
 				sh '''
-				mkdir -p dist
-				echo "artifact" > dist/build.txt
+				mkdir dist
+				echo "build result" > dist/result.txt
 				'''
 
 				stash(
-					name: 'build-files',
+					name: 'app',
 					includes: 'dist/**'
 				)
 			}
 		}
 		
 		stage('Test-unstash') {
+			agent any
+
 			steps {
 
-				unstash 'build-files'
+				unstash 'app'
 
-				sh 'cat dist/build.txt'
+				sh 'cat dist/result.txt'
 			}
 		}
 
