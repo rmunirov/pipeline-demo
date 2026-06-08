@@ -46,6 +46,30 @@ pipeline {
 				}
 			}
 		}
+		
+		stage('Checks') {
+
+			parallel {
+
+				stage('Lint') {
+					steps {
+						sh 'sleep 5'
+					}
+				}
+
+				stage('Tests') {
+					steps {
+						sh 'sleep 10'
+					}
+				}
+
+				stage('Security') {
+					steps {
+						sh 'sleep 7'
+					}
+				}
+			}
+		}
 
         stage('Build') {
             steps {
