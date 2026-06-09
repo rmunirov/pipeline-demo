@@ -70,6 +70,30 @@ pipeline {
 				}
 			}
 		}
+		
+		stage('Quality Checks') {
+
+			parallel {
+
+				stage('Lint') {
+					steps {
+						sh 'echo Lint'
+					}
+				}
+
+				stage('Unit Tests') {
+					steps {
+						sh 'echo Tests'
+					}
+				}
+
+				stage('Coverage') {
+					steps {
+						sh 'echo Coverage'
+					}
+				}
+			}
+		}
 
         stage('Build') {
             steps {
@@ -84,7 +108,7 @@ pipeline {
 			steps {
 
 				sh '''
-				mkdir dist
+				mkdir -p dist
 				echo "build result" > dist/result.txt
 				'''
 
@@ -92,6 +116,17 @@ pipeline {
 					name: 'app',
 					includes: 'dist/**'
 				)
+			}
+		}
+		
+		stage('Build Image') {
+
+			steps {
+
+				sh '''
+				docker build \
+					-t demo-app:${BUILD_NUMBER} .
+				'''
 			}
 		}
 		
@@ -120,6 +155,42 @@ pipeline {
                 '''
             }
         }
+		
+		stage('Tag Image') {
+
+			steps {
+
+				sh '''
+				docker tag \
+				demo-app:${BUILD_NUMBER} \
+				railko/demo-app:${BUILD_NUMBER}
+				'''
+			}
+		}
+		
+		stage('Push Image') {
+
+			steps {
+
+				withCredentials([
+					usernamePassword(
+						credentialsId: 'dockerhub',
+						usernameVariable: 'DOCKER_USER',
+						passwordVariable: 'DOCKER_PASS'
+					)
+				]) {
+
+					sh '''
+					docker login \
+						-u $DOCKER_USER \
+						-p $DOCKER_PASS
+
+					docker push \
+						railko/demo-app:${BUILD_NUMBER}
+					'''
+				}
+			}
+		}
 
 		stage('Images') {
 			steps {
