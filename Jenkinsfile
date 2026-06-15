@@ -1,3 +1,5 @@
+@Library('shared-lib') _
+
 pipeline {
 
     agent any
@@ -7,6 +9,16 @@ pipeline {
     }
 
     stages {
+	
+	    stage('Test Shared LIB') {
+
+            steps {
+
+                script {
+                    sayHello()
+                }
+            }
+        }
 
         stage('Checkout') {
             steps {
@@ -164,6 +176,20 @@ pipeline {
 				docker tag \
 				demo-app:${BUILD_NUMBER} \
 				railko/demo-app:${BUILD_NUMBER}
+				'''
+			}
+		}
+		
+		stage('Tag double') {
+
+			steps {
+
+				sh '''
+				docker tag demo-app:${BUILD_NUMBER} \
+						   railko/demo-app:${BUILD_NUMBER}
+
+				docker tag demo-app:${BUILD_NUMBER} \
+						   railko/demo-app:latest
 				'''
 			}
 		}
