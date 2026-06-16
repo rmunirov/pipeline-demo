@@ -1,4 +1,7 @@
+import com.company.Utils
+
 @Library('shared-lib') _
+
 
 pipeline {
 
@@ -16,6 +19,10 @@ pipeline {
 
                 script {
                     sayHello()
+					greet("Roman")
+					dockerBuild("demo-app")
+					dockerPush("demo-app")
+					def tag = Utils.imageTag(BUILD_NUMBER)
                 }
             }
         }
